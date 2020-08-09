@@ -27,7 +27,6 @@ export class ProductsController {
 
     @Post()
     async create(@Body() product: ProductDto): Promise<ProductEntity> {
-        // create a new post and return the newly created post
         return await this.productService.create(product);
     }
 

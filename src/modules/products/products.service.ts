@@ -9,7 +9,8 @@ export class ProductsService {
     constructor(@Inject(PRODUCT_REPOSITORY) private readonly productRepository: typeof Product) { }
 
     async create(product: ProductDto): Promise<Product> {
-        return await this.productRepository.create<Product>({ ...product });
+        // return JSON.stringify(product.rules)
+        return await this.productRepository.create<Product>({ name: product.name, price: product.price, rules: JSON.stringify(product.rules) });
     }
 
     async findAll(): Promise<Product[]> {
@@ -26,8 +27,8 @@ export class ProductsService {
         return await this.productRepository.destroy({ where: { id } });
     }
 
-    async update(id, data) {
-        const [numberOfAffectedRows, [updatedProduct]] = await this.productRepository.update({ ...data }, { where: { id }, returning: true });
+    async update(id, product: ProductDto) {
+        const [numberOfAffectedRows, [updatedProduct]] = await this.productRepository.update({ name: product.name, price: product.price, rules: JSON.stringify(product.rules) }, { where: { id }, returning: true });
 
         return { numberOfAffectedRows, updatedProduct };
     }
