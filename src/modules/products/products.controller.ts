@@ -17,7 +17,6 @@ export class ProductsController {
     async findOne(@Param('id') id: number): Promise<ProductEntity> {
         const product = await this.productService.findOne(id);
 
-        // if the post doesn't exit in the db, throw a 404 error
         if (!product) {
             throw new NotFoundException('This Product doesn\'t exist');
         }
