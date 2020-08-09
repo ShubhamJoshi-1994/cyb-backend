@@ -1,29 +1,3 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
-
-[travis-image]: https://api.travis-ci.org/nestjs/nest.svg?branch=master
-[travis-url]: https://travis-ci.org/nestjs/nest
-[linux-image]: https://img.shields.io/travis/nestjs/nest/master.svg?label=linux
-[linux-url]: https://travis-ci.org/nestjs/nest
-  
-  <p align="center">A progressive <a href="http://nodejs.org" target="blank">Node.js</a> framework for building efficient and scalable server-side applications, heavily inspired by <a href="https://angular.io" target="blank">Angular</a>.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore"><img src="https://img.shields.io/npm/dm/@nestjs/core.svg" alt="NPM Downloads" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://api.travis-ci.org/nestjs/nest.svg?branch=master" alt="Travis" /></a>
-<a href="https://travis-ci.org/nestjs/nest"><img src="https://img.shields.io/travis/nestjs/nest/master.svg?label=linux" alt="Linux" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#5" alt="Coverage" /></a>
-<a href="https://gitter.im/nestjs/nestjs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=body_badge"><img src="https://badges.gitter.im/nestjs/nestjs.svg" alt="Gitter" /></a>
-<a href="https://opencollective.com/nest#backer"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec"><img src="https://img.shields.io/badge/Donate-PayPal-dc3d53.svg"/></a>
-  <a href="https://twitter.com/nestframework"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
@@ -47,28 +21,128 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+## APIs
 
-```bash
-# unit tests
-$ npm run test
+### PRODUCT CRUD
+- __`[POST] http://localhost:3000/api/products`__
+- payload
+```
+  {
+    "name": "Product-E",
+    "price": 25,
+    "rules": [
+      "item": "Product-A"
+      "discountPrice": 5
+      "quantityForDiscount": 3
+    ]
+  }
+```
+- rules for an Item has to be passed as in array of object in the above stated format. In case a product doesn't have discount rules then an empty array should be passed `[]`.
 
-# e2e tests
-$ npm run test:e2e
+___
+- __`[GET] http://localhost:3000/api/products`__
+- Get list of all products
 
-# test coverage
-$ npm run test:cov
+___
+- __`[GET] http://localhost:3000/api/products/:id`__
+- Get a single product based on ID.
+
+___
+- __`[PUT] http://localhost:3000/api/products/:id`__
+- Update a product based on ID.
+
+___
+- __`[DELETE] http://localhost:3000/api/products/:id`__
+- Delete a product.
+
+___
+
+### CART APIs
+- __`[POST] http://localhost:3000/api/carts/add-items`__
+- add items to Cart
+- payload
+```
+{
+	"items": [
+		{
+			"item": "Product-C",
+			"id": 3
+		},
+		{
+			"item": "Product-A",
+			"id": 1
+		},
+		{
+			"item": "Product-D",
+			"id": 5
+		},
+		{
+			"item": "Product-A",
+			"id": 1
+		},
+		{
+			"item": "Product-A",
+			"id": 1
+		},
+		{
+			"item": "Product-E",
+			"id": 6
+		}
+	]
+}
 ```
 
-## Support
+___
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- __`[GET] http://localhost:3000/api/carts/:id`__
+- get Cart Record.
 
-## Stay in touch
+___
+### Checkout API
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- __`[GET] http://localhost:3000/api/carts/:id/checkout`__
+- Checkout cart of the given ID.
+- Resonse
+```
+[
+    {
+        "name": "Product-C",
+        "quantity": 1,
+        "price": 50,
+        "discount": 0,
+        "final_total_price_for_item": 50
+    },
+    {
+        "name": "Product-A",
+        "quantity": 3,
+        "price": 90,
+        "discount": 15,
+        "final_total_price_for_item": 75
+    },
+    {
+        "name": "Product-D",
+        "quantity": 1,
+        "price": 15,
+        "discount": 0,
+        "final_total_price_for_item": 15
+    },
+    {
+        "name": "Product-E",
+        "quantity": 1,
+        "price": 27,
+        "discount": 0,
+        "final_total_price_for_item": 27
+    },
+    {
+        "total": 147,
+        "total_discount": 35
+    }
+]
+```
+
+## Assumtions taken
+- Each product can have at max one discount rule. Based on this assumption, we are just checking the first rule of a product.
+- Total discount rule, is provided by the application and the USER cannot Create it. Thus is rule is hardcoded as a constant.
 
 ## License
 
