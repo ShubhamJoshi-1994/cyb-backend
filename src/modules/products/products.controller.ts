@@ -46,7 +46,7 @@ export class ProductsController {
         const deleted = await this.productService.delete(id);
 
         if (deleted === 0) {
-            throw new NotFoundException('This Post doesn\'t exist');
+            throw new NotFoundException('This Product doesn\'t exist');
         }
 
         return 'Successfully deleted';
