@@ -28,7 +28,7 @@ $ npm run start:prod
 - payload
 ```
   {
-    "name": "Product-E",
+    "name": "Product-A",
     "price": 25,
     "rules": [
       "item": "Product-A"
