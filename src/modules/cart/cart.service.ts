@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Injectable, Inject } from '@nestjs/common';
 import { Cart } from './cart.entity';
-// import { ProductDto } from './dto/product.dto';
 import { CART_REPOSITORY } from '../../core/constants';
 
 @Injectable()
@@ -26,6 +25,10 @@ export class CartService {
         return await this.cartRepository.findOne({
         	where: { id },
     	});
+    }
+
+    async updateFinalPrice(id, totals) {
+        return await this.cartRepository.update({ final_price: totals.total_price, final_discount: totals.total_discount }, { where: { id }, returning: true });
     }
    
 }

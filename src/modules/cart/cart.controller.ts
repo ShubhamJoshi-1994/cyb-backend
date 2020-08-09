@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Controller, Get, Post, Param, Body, NotFoundException } from '@nestjs/common';
 import { CartService } from './cart.service';
-// import { CheckoutService } from '../checkout/checkout.service';
+import { CheckoutService } from '../checkout/checkout.service';
 import { Cart as CartEntity } from './cart.entity';
 import { ItemsDto } from './dto/items.dto';
 
 @Controller('carts')
 export class CartController {
-    constructor(private readonly cartService: CartService) { }
+    constructor(private readonly cartService: CartService, private readonly checkoutService: CheckoutService) { }
 
     @Get()
     async findAll() {
@@ -25,20 +25,19 @@ export class CartController {
         return cart;
     }
 
-    // save Item to cart [POST]
     @Post('add-items')
     async addToCart(@Body() items: ItemsDto): Promise<CartEntity> {
         return await this.cartService.addItems(JSON.stringify(items.items));
     }
 
-    // @Get(':id/checkout')
-    // async checkoutCart(@Param('id') id: number) {
-    //     const cart = await this.cartService.getCartItems(id);
-    //     if (!cart) {
-    //         throw new NotFoundException('This Cart doesn\'t exist');
-    //     } else {
-    //         const cartItems = JSON.parse(cart.items);
-    //         return this.checkoutService.checkout(cartItems);
-    //     }
-    // }
+    @Get(':id/checkout')
+    async checkoutCart(@Param('id') id: number) {
+        const cart = await this.cartService.getCartItems(id);
+        if (!cart) {
+            throw new NotFoundException('This Cart doesn\'t exist');
+        } else {
+            const cartItems = JSON.parse(cart.items);
+            return this.checkoutService.checkout(cartItems, id);
+        }
+    }
 }
